@@ -21,7 +21,7 @@ COPY deploy-container/rclone-tasks.json /tmp/rclone-tasks.json
 RUN sudo chown -R coder:coder /home/coder/.local
 
 # Make Sudo
-RUN usermod -aG sudo coder
+RUN sudo usermod -aG sudo coder
 
 # You can add custom software and dependencies for your environment below
 # -----------
