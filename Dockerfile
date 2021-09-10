@@ -20,8 +20,18 @@ COPY deploy-container/rclone-tasks.json /tmp/rclone-tasks.json
 # Fix permissions for code-server
 RUN sudo chown -R coder:coder /home/coder/.local
 
-# Make Sudo
-RUN sudo usermod -aG sudo coder
+ENV UNAME pacat
+
+# VISIT US REXXAR.iR
+RUN export UNAME=$UNAME UID=1000 GID=1000 && \
+    mkdir -p "/home/${UNAME}" && \
+    echo "${UNAME}:x:${UID}:${GID}:${UNAME} User,,,:/home/${UNAME}:/bin/bash" >> /etc/passwd && \
+    echo "${UNAME}:x:${UID}:" >> /etc/group && \
+    mkdir -p /etc/sudoers.d && \
+    echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${UNAME} && \
+    chmod 0440 /etc/sudoers.d/${UNAME} && \
+    chown ${UID}:${GID} -R /home/${UNAME} && \
+    gpasswd -a ${UNAME} audio
 
 # You can add custom software and dependencies for your environment below
 # -----------
